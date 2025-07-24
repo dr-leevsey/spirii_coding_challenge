@@ -1,6 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { UserAggregationService } from './user-aggregation.service';
 import { UserAggregateResponseDto } from './dto/user-aggregate-response.dto';
+import { UserIdParamDto } from './dto/user-id-param.dto';
 
 @Controller('users')
 export class UsersController {
@@ -15,8 +16,8 @@ export class UsersController {
    */
   @Get(':userId/aggregates')
   async getUserAggregates(
-    @Param('userId') userId: string,
+    @Param() params: UserIdParamDto,
   ): Promise<UserAggregateResponseDto> {
-    return this.userAggregationService.getUserAggregates(userId);
+    return this.userAggregationService.getUserAggregates(params.userId);
   }
 }

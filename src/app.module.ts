@@ -12,6 +12,7 @@ import {
 import { TransactionApiModule } from './transaction-api/transaction-api.module';
 import { SyncModule } from './sync/sync.module';
 import { AggregationModule } from './aggregation/aggregation.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { AggregationModule } from './aggregation/aggregation.module';
     TransactionApiModule,
     SyncModule,
     AggregationModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

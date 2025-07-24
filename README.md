@@ -17,6 +17,12 @@ The microservice collects transactions from the Transaction API and provides agg
 - **TypeORM** - ORM for database operations
 - **Docker Compose** - containerization for dev environment
 
+## Documentation
+
+📖 **[API Usage Examples](docs/API_EXAMPLES.md)** - Comprehensive API documentation with real examples
+
+🧪 **[Testing Strategy](docs/TESTING_STRATEGY.md)** - Complete testing approach and quality assurance
+
 ## Quick Start
 
 ### Prerequisites
@@ -51,6 +57,17 @@ The microservice collects transactions from the Transaction API and provides agg
    http://localhost:3000
    ```
 
+5. **Test the API:**
+   ```bash
+   # Check system health
+   curl http://localhost:3000/health
+   
+   # Get user aggregates (example)
+   curl http://localhost:3000/users/074092/aggregates
+   
+   # See complete examples in docs/API_EXAMPLES.md
+   ```
+
 ### Local Development
 
 1. **Install dependencies:**
@@ -70,7 +87,11 @@ The microservice collects transactions from the Transaction API and provides agg
 
 ## API Endpoints
 
-### 1. Get User Aggregated Data
+> 📖 **For complete API documentation with examples, see [API_EXAMPLES.md](docs/API_EXAMPLES.md)**
+
+### Core Endpoints
+
+#### 1. Get User Aggregated Data
 
 ```http
 GET /users/{userId}/aggregates
@@ -89,7 +110,7 @@ GET /users/{userId}/aggregates
 }
 ```
 
-### 2. Get List of Requested Payouts
+#### 2. Get List of Requested Payouts
 
 ```http
 GET /payouts/requests
@@ -109,6 +130,22 @@ GET /payouts/requests
     }
   ]
 }
+```
+
+#### 3. Health Check & Monitoring
+
+```http
+GET /health              # System health overview
+GET /health/database     # Database connectivity check
+GET /health/sync        # Synchronization status
+GET /health/metrics     # System performance metrics
+```
+
+#### 4. Synchronization Management
+
+```http
+POST /sync/transactions  # Trigger manual sync
+GET /sync/status        # Get sync history and status
 ```
 
 ## Architecture Decisions
@@ -131,6 +168,10 @@ GET /payouts/requests
 
 ## Testing
 
+> 🧪 **For detailed testing strategy and examples, see [TESTING_STRATEGY.md](docs/TESTING_STRATEGY.md)**
+
+### Quick Test Commands
+
 ```bash
 # Unit tests
 npm run test
@@ -141,6 +182,14 @@ npm run test:e2e
 # Test coverage
 npm run test:cov
 ```
+
+### Quality Assurance Features
+
+- **Unit Tests**: Comprehensive testing with Jest and NestJS utilities
+- **Health Monitoring**: Real-time system status endpoints
+- **Input Validation**: Global validation with class-validator
+- **Error Handling**: Graceful error scenarios and recovery
+- **Performance Testing**: Load testing examples and monitoring
 
 ## Environment Variables
 
@@ -159,3 +208,34 @@ See `config.example.env` for a complete list of available settings.
 2. **Simple authentication**: Not implemented in MVP version
 3. **Minimal validation**: Basic input data validation
 4. **Single instance**: Not optimized for horizontal scaling
+
+## Project Structure
+
+```
+spirii_coding_challenge/
+├── docs/                           # Documentation
+│   ├── API_EXAMPLES.md            # Complete API usage examples
+│   └── TESTING_STRATEGY.md        # Testing approach and quality assurance
+├── src/
+│   ├── aggregation/               # User data aggregation module
+│   ├── entities/                  # Database entities (TypeORM)
+│   ├── health/                    # Health check and monitoring
+│   ├── sync/                      # Transaction synchronization
+│   └── transaction-api/           # Mock Transaction API
+├── docker-compose.yml             # Development environment
+├── init.sql                       # Database schema initialization
+└── config.example.env             # Environment variables template
+```
+
+## Additional Resources
+
+- 📖 **[Complete API Documentation](docs/API_EXAMPLES.md)** - Real examples with curl commands
+- 🧪 **[Testing Strategy](docs/TESTING_STRATEGY.md)** - Comprehensive testing approach
+- 🐳 **[Docker Setup](docker-compose.yml)** - Multi-container development environment
+- 🗄️ **[Database Schema](init.sql)** - PostgreSQL table definitions and indexes
+
+---
+
+**Challenge**: Spirii Backend Developer Recruiting Challenge  
+**Framework**: NestJS + TypeORM + PostgreSQL + Redis  
+**MVP Focus**: Data aggregation with high performance and reliability
