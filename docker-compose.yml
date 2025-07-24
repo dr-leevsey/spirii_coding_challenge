@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database for storing aggregated transaction data
+  postgres:
+    image: postgres:15-alpine
+    container_name: spirii_postgres
+    environment:
+      POSTGRES_DB: spirii_transactions
+      POSTGRES_USER: spirii_user
+      POSTGRES_PASSWORD: spirii_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spirii_network
+
+  # Redis for caching frequently accessed data
+  redis:
+    image: redis:7-alpine
+    container_name: spirii_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - spirii_network
+
+  # NestJS microservice
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: spirii_api
+    environment:
+      NODE_ENV: development
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: spirii_transactions
+      DB_USER: spirii_user
+      DB_PASSWORD: spirii_password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - spirii_network
+    command: npm run start:dev
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  spirii_network:
+    driver: bridge 
